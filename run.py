@@ -104,7 +104,7 @@ def main():
     # TODO: do using targets???
     # apply the permutations
     df.apply(np.random.permutation)
-    maxn = len(df) if len(df) > args.max_num_points else args.max_num_points
+    maxn = len(df) if args.max_num_points > len(df) else args.max_num_points
     df = df[:maxn]
 
     rdata = calculate_tsne(np.array(df.data.tolist()))
