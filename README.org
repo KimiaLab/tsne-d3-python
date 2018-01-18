@@ -1,0 +1,53 @@
+* TSNE Visualization
+
+** How to run?
+
+In order to visualize your ~NxM~ data, you will need to convert it to CSV file. The
+format for CSV should follow the following rules.
+
+1. First column: MUST contain image file name.
+2. Second column: If you've label information for your data points, then add
+   that to the second column of the CSV file. It must be strictly integer value
+   representing the class label. (You may skip this step if there isn't any
+   class label or just append 0 in entire column)
+3. Rest of the columns: Must represent your data points.
+
+
+Next, you should place your image files in ~web/img/~.
+
+Then, run the code ~python run.py --target data.csv~
+
+** Command line arguments
+
+| ~--header~         | If your CSV file contains header information (in the first row) |
+| ~--server~         | Start the server (localhost:8000) to host the TSNE files        |
+| ~--targets~        | If you have target column within your input CSV file            |
+| ~--max_num_points~ | Max number of data points to use for visualization              |
+
+** Sample code to construct CSV file
+
+#+BEGIN_SRC python
+  import numpy as np
+  import pandas as pd
+  # Lets say you've data in `numpy` array
+  # 1000 data points of 50D
+  arr = np.random.rand(1000, 50)
+
+  # labels for above data is here
+  labels = np.random.randint(0, 10, (1000,))
+  # first convert it to pandas frame
+  df = pd.DataFrame(arr)
+
+  # insert image locations
+  df.insert(0, 'image', ['image.png']*1000)
+
+  # insert targets
+  df.insert(1, 'target', labels)
+
+  # now convert that to CSV
+  df.to_csv('data.csv', index=False, header=False)
+
+  # now you can run the script as follows
+  # python run.py --target data.csv --server
+  # and once finished open localhost:8000
+#+END_SRC

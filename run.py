@@ -1,6 +1,4 @@
-from sklearn.datasets import fetch_mldata
 from sklearn.manifold import TSNE
-from skimage.io import imsave
 import numpy as np
 from matplotlib import cm
 import matplotlib
@@ -31,6 +29,7 @@ def read_input_csv(file_path, has_header, has_target):
     df = df.iloc[:, :len(initial_columns)]
     df.columns = initial_columns
     df['data'] = [list(d) for d in data]
+    df.image = df.image.apply(lambda x: '/' + x)
 
     return df
 
@@ -105,7 +104,8 @@ def main():
     # TODO: do using targets???
     # apply the permutations
     df.apply(np.random.permutation)
-    df = df[:args.max_num_points]
+    maxn = len(df) if len(df) > args.max_num_points else args.max_num_points
+    df = df[:maxn]
 
     rdata = calculate_tsne(np.array(df.data.tolist()))
     x = rdata[:, 0]
